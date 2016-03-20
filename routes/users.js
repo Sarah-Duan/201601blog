@@ -22,7 +22,7 @@ router.post('/login',function(req,res){
 
 //退出登录
 router.get('/logout',function(req,res){
-  res.render('user/logout');
+  res.send('logout');
 });
 
 module.exports = router;

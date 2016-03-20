@@ -11,7 +11,7 @@ var bodyParser = require('body-parser');
 //加载路由 根据请求的路径不同，进行不同的处理
 var routes = require('./routes/index');
 var users = require('./routes/users');
-
+var articles = require('./routes/articles');
 var app = express();
 
 //设置模板文件的存放路径
@@ -34,7 +34,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', routes);
 //这里的/才是一级路径，真正的根目录
 app.use('/users', users);
-
+app.use('/articles', articles);
 //捕获404的错误并且转发到错误处理中 间件里去
 app.use(function(req, res, next) {
   var err = new Error('Not Found');
