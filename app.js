@@ -20,7 +20,7 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
 //需要你把收藏夹的图标文件放在 public下面
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 //使用日志中间件
 app.use(logger('dev'));
 //解析JSON类型的请求请求 通过请求中的Content-Type {}

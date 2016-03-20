@@ -8,7 +8,7 @@ router.use(function(req,res,next){
 //当用户访问/的时候，执行对应的回调函数
 router.get('/', function(req, res, next) {
   //用数据渲染模板
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: '<h1>Express</h1>' });
 });
 
 module.exports = router;
