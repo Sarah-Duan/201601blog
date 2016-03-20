@@ -7,8 +7,9 @@ router.use(function(req,res,next){
 });
 //当用户访问/的时候，执行对应的回调函数
 router.get('/', function(req, res, next) {
-  //用数据渲染模板
-  res.render('index', { title: '<h1>Express</h1>' });
+  //用数据渲染模板 从session
+  //第二个参数对象最后会合并到res.locals对象上，并渲染模板
+  res.render('index', {});
 });
 
 module.exports = router;

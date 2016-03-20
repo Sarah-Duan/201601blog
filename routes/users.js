@@ -13,6 +13,8 @@ router.post('/reg',function(req,res){
     if(err){
         res.redirect('back');//返回到上一个页面
     }else{
+      //把保存之后的用户放置到此用户会话的user属性上
+        req.session.user = doc;
         res.redirect('/');
     }
   });
@@ -30,7 +32,8 @@ router.post('/login',function(req,res){
 
 //退出登录
 router.get('/logout',function(req,res){
-  res.send('logout');
+  req.session.user  = null;
+  res.redirect('/');
 });
 
 module.exports = router;

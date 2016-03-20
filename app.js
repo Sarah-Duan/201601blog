@@ -12,6 +12,8 @@ var bodyParser = require('body-parser');
 var routes = require('./routes/index');
 var users = require('./routes/users');
 var articles = require('./routes/articles');
+var session = require('express-session');
+var MongoStore = require('connect-mongo/es5')(session);
 var app = express();
 
 //设置模板文件的存放路径
@@ -20,7 +22,16 @@ app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'html');
 //设置一下对于html格式的文件，渲染的时候委托ejs的渲染方面来进行渲染
 app.engine('html', require('ejs').renderFile);
-
+//使用了会话中间件之后，req.session
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://123.57.143.189:27017/201601blog');
+app.use(session({
+  secret: '2016blog',
+  resave: false,
+  saveUninitialized: true,
+  //指定保存的位置
+  store: new MongoStore({mongooseConnection: mongoose.connection})
+}));
 //需要你把收藏夹的图标文件放在 public下面
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 //使用日志中间件
@@ -32,6 +43,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 //静态文件服务中间件 指定静态文件根目录
 app.use(express.static(path.join(__dirname, 'public')));
+//配置模板的中间件
+app.use(function(req,res,next){
+  //res.locals才是真正的渲染模板的对象
+  res.locals.user = req.session.user;
+  next();
+});
+
 //路由配置
 app.use('/', routes);
 //这里的/才是一级路径，真正的根目录
