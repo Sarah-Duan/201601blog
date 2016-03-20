@@ -17,7 +17,9 @@ var app = express();
 //设置模板文件的存放路径
 app.set('views', path.join(__dirname, 'views'));
 // 设置模板引擎
-app.set('view engine', 'ejs');
+app.set('view engine', 'html');
+//设置一下对于html格式的文件，渲染的时候委托ejs的渲染方面来进行渲染
+app.engine('html', require('ejs').renderFile);
 
 //需要你把收藏夹的图标文件放在 public下面
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
