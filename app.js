@@ -14,6 +14,7 @@ var users = require('./routes/users');
 var articles = require('./routes/articles');
 var session = require('express-session');
 var MongoStore = require('connect-mongo/es5')(session);
+var flash = require('connect-flash');
 var app = express();
 
 //设置模板文件的存放路径
@@ -32,6 +33,7 @@ app.use(session({
   //指定保存的位置
   store: new MongoStore({mongooseConnection: mongoose.connection})
 }));
+app.use(flash());
 //需要你把收藏夹的图标文件放在 public下面
 app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 //使用日志中间件
@@ -47,6 +49,9 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use(function(req,res,next){
   //res.locals才是真正的渲染模板的对象
   res.locals.user = req.session.user;
+  //flash取出来的是一个数组
+  res.locals.success = req.flash('success').toString();
+  res.locals.error = req.flash('error').toString();
   next();
 });
 
