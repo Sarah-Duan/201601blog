@@ -6,7 +6,8 @@ var mongoose = require('mongoose');
 var userSchema = new mongoose.Schema({
     username:String,
     password:String,
-    email:String
+    email:String,
+    avatar:String
 });
 //再定义model
 var userModel = mongoose.model('user',userSchema);

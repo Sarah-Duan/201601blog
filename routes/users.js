@@ -1,6 +1,7 @@
 var express = require('express');
 var userModel = require('../model/user');
 var validate = require('../middle/index.js');
+var crypto = require('crypto');
 //生成一个路由实例
 var router = express.Router();
 //用户注册 当用户通过get方法请求 /users/reg的时候，执行此回调
@@ -11,7 +12,9 @@ router.get('/reg',validate.checkNotLogin,function(req,res){
 //提交用户注册的表单
 router.post('/reg',validate.checkNotLogin,function(req,res){
   var user = req.body;
-  userModel.create(user,function(err,doc){
+  user.avatar = 'https://secure.gravatar.com/avatar/'+md5(user.email);
+  user.password = md5(user.password);
+    userModel.create(user,function(err,doc){
     if(err){
         req.flash('error',err);
         res.redirect('back');//返回到上一个页面
@@ -32,7 +35,18 @@ router.get('/login',validate.checkNotLogin,function(req,res){
 
 //提交用户登录的表单
 router.post('/login',validate.checkNotLogin,function(req,res){
-  res.send('login');
+    var user = req.body;
+    user.password = md5(user.password);
+    userModel.findOne(user,function(err,user){
+        if(err){
+            req.flash('error',err);
+            return res.redirect('back');//返回到上一个页面
+        }else{
+            req.session.user = user;
+            req.flash('success','登录成功');
+            res.redirect('/');
+        }
+    });
 });
 
 //退出登录
@@ -42,3 +56,8 @@ router.get('/logout',validate.checkLogin,function(req,res){
 });
 
 module.exports = router;
+
+function md5(str){
+    return  crypto.createHash('md5')
+        .update(str).digest('hex');//hex十六进制
+}
